@@ -1,15 +1,11 @@
 alias l := lint
 
-# run once to initialize env
-init:
-    uv sync
-    uv run pytest -p pytest_pretty
-
 # run project formatters/linters
 lint:
     uv run ruff check --fix
     uv run ruff format
     just --fmt --unstable
+    yamllint .
     markdownlint-cli2 . --fix
     uv run mypy
 

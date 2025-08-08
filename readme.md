@@ -40,14 +40,13 @@ mise trust
 mise install
 
 # list available just recipes
-just -l
+just --list
 
   Available recipes:
-    init        # run once to initialize env
     lint        # run project formatters/linters [alias: l]
-    ruff_unsafe # run ruff unsafe-fixes
+    ruff_unsafe # run ruff with unsafe-fixes
     test        # Detect and display canny edges on a set of test images. Use ctrl+c to kill
 
-# run canny edge detector on test files and display the resulting edge mask - kill with ctrl+c
+# run canny edge detector on test files and display the resulting edge mask - kill Qt windows with ctrl+c
 just test
 ```
