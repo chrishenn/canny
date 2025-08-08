@@ -1,0 +1,16 @@
+[tool.uv]
+workspace.members = ["packages/*"]
+
+[tool.mypy]
+packages = ["canny"]
+exclude = ["deprecated"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["packages*"]
+python_files = ["test_*.py", "*_test.py"]
+
+[dependency-groups]
+dev = [
+    "pytest_pretty",
+]

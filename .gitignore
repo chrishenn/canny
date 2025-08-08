@@ -1,0 +1,17 @@
+.vscode/
+.idea/
+.venv/
+*__pycache__*
+*secret*
+*.env
+*.dmypy.json*
+*out/
+node_modules/
+.mypy_cache/
+.ruff_cache/
+tmp/
+*.bak*
+*~
+*.pth
+checkpoints/
+
