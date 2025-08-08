@@ -42,19 +42,12 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 select = ["ALL"]
 ignore = [
-    # docstrings
-    "D", "RUF009",
-
-    # do not enable: buggy inspections
-    "EXE",
-
-    # allow print(), exceptions f-strings, todos
-#    "T201", "EM102", "TD002", "TD003", "FIX002",
-
-    # do not enable: conflicts with ruff formatter
+    # conflicts with ruff formatter
     "W191", "E111", "E114", "E117", "D206", "D300", "Q000", "Q001", "Q002", "Q003", "COM812", "COM819", "ISC001", "ISC002",
 
-    # do not enable
+    "D",        # docstrings everywhere
+    "RUF009",
+    "EXE",      # buggy
     "G004",     # flake8-logging-format (buggy)
     "A004",     # Import <pkg> is shadowing a Python builtin (useful for map, filter, etc)
     "C90",      # mccabe name complexity (odd)

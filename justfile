@@ -1,22 +1,22 @@
 alias l := lint
 
-# run once to initialize env
-init:
-    uv sync
-    uv run pytest -p pytest_pretty
-
 # run project formatters/linters
 lint:
     uv run ruff check --fix
     uv run ruff format
     just --fmt --unstable
+    yamllint .
     markdownlint-cli2 . --fix
     uv run mypy
 
 # run ruff with unsafe-fixes
-ruff_unsafe:
+unsafe:
     uv run ruff check --fix --unsafe-fixes
 
-# Detect and display canny edges on a set of test images. Use ctrl+c to kill
+# Show canny detections on a set of test images. Kill with ctrl+c
+demo:
+    uv run packages/canny_chenn/test/test_demo.py
+
+# run basic tests
 test:
-    uv run pytest
+    pytest
