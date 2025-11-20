@@ -1,25 +1,47 @@
 [project]
 name = "canny"
-version = "0.1.0"
-description = ""
+version = "1.0.0"
+description = "A simple Canny edge detector for pytorch"
 readme = "readme.md"
-requires-python = ">=3.13"
+authors = [{name = "Christian Henn", email = "chenn@alum.mit.edu"}]
+license = "MIT"
+urls = {Homepage = "https://example.com", Repository = "https://github.com/me/spam.git"}
+keywords = ["computer vision", "edge detection", "opencv"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+requires-python = ">=3.13.9,<3.14"
 dependencies = [
-    "torch>=2.8.0",
+    "numpy>=2.3.5",
+    "torch>=2.9.1",
 ]
 
 [build-system]
-requires = ["uv_build"]
+requires = ["uv_build>=0.9.10,<0.10.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
     "matplotlib>=3.10.5",
     "more-itertools>=10.7.0",
+    "torchvision>=0.24.1",
     "mypy>=1.17.1",
     "pytest>=8.4.1",
     "ruff>=0.12.8",
-    "torchvision>=0.23.0",
-    "uv-build>=0.8.6",
+    "uv-build",
     "PyQt6",
 ]
+
+[tool.uv.sources]
+torch = { index = "torch-cu130" }
+torchvision = { index = "torch-cu130" }
+
+[[tool.uv.index]]
+name = "torch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.build-backend]
+module-root = "src"

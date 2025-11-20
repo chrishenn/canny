@@ -1,15 +1,13 @@
 <h1 align="center" style="margin-top: 0px;">Canny Edges</h1>
 <div id="img0" align="center">
-    <img src="doc/images/img1.png" width=300 alt="img1_in">
-    <img src="doc/images/img1_out.png" width=300 alt="img1_out">
+    <img src="doc/images/img1.png" width=200 alt="img1_in">
+    <img src="doc/images/img2.png" width=200 alt="img2_in">
+    <img src="doc/images/img3.png" width=200 alt="img3_in">
 </div>
 <div id="img0" align="center">
-    <img src="doc/images/img2.png" width=300 alt="img2_in">
-    <img src="doc/images/img2_out.png" width=300 alt="img2_out">
-</div>
-<div id="img1" align="center">
-    <img src="doc/images/img3.png" width=300 alt="img3_in">
-    <img src="doc/images/img3_out.png" width=300 alt="img3_out">
+    <img src="doc/images/img1_out.png" width=200 alt="img1_out">
+    <img src="doc/images/img2_out.png" width=200 alt="img2_out">
+    <img src="doc/images/img3_out.png" width=200 alt="img3_out">
 </div>
 
 &emsp;
@@ -26,27 +24,31 @@ Supports:
 
 # Usage
 
+I use mise to handle project tools. Install it if you don't have it
+
 ```bash
-# clone
 git clone https://github.com/chrishenn/canny.git
 cd canny
-
-# bash: install mise
-curl https://mise.run | sh
-
-# activate mise in project dir, install tools
-mise activate
-mise trust
-mise install
+mise i
 
 # list available just recipes
 just --list
 
-  Available recipes:
+Available recipes:
+    interactive # Detect and display canny edges on a set of test images. Use ctrl+c to kill
     lint        # run project formatters/linters [alias: l]
-    ruff_unsafe # run ruff with unsafe-fixes
-    test        # Detect and display canny edges on a set of test images. Use ctrl+c to kill
+    test        # run basic tests
+    unsafe      # run ruff with unsafe-fixes
+```
 
-# run canny edge detector on test files and display the resulting edge mask - kill Qt windows with ctrl+c
-just test
+---
+
+# Dev
+
+```bash
+# build distrobution pkgs locally
+uv build --package canny
+
+# push tag to trigger pypi to build pkgs and publish to pypi
+git tag -a v0.1.0 -m v0.1.0 && git push --tags
 ```

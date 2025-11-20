@@ -8,14 +8,19 @@ class Canny(nn.Module):
     selection_ids: Tensor
 
     def __init__(
-        self, thresh_lo: float, thresh_hi: float, sobel_k: int = 5, gauss_k: int = 5, gauss_sigma: float = 0.1
+        self,
+        thresh_lo: float = 0.1,
+        thresh_hi: float = 0.2,
+        sobel_k: int = 5,
+        gauss_k: int = 5,
+        gauss_sigma: float = 0.1,
     ) -> None:
         super().__init__()
 
-        self.low_threshold, self.high_threshold = thresh_lo, thresh_hi
+        self.thresh_lo, self.thresh_hi = thresh_lo, thresh_hi
 
-        self.selection_conv, selection_ids = self.selection()
-        self.register_buffer("selection_ids", selection_ids)
+        self.select_conv, select_ids = self.selection()
+        self.register_buffer("selection_ids", select_ids)
 
         self.sobel_x, self.sobel_y = self.sobel(sobel_k)
         self.gauss = self.gaussian(gauss_k, gauss_sigma)
@@ -23,40 +28,40 @@ class Canny(nn.Module):
 
         self.requires_grad_(requires_grad=False)
 
-    def selection(self) -> tuple[nn.Conv2d, Tensor]:
+    @staticmethod
+    def selection() -> tuple[nn.Conv2d, Tensor]:
         zeros = t.zeros([3, 3])
 
-        hori_lf = zeros.clone()
-        hori_rt = zeros.clone()
-        hori_lf[0, 1] = 1
-        hori_rt[2, 1] = 1
+        lf = zeros.clone()
+        rt = zeros.clone()
+        lf[0, 1] = 1
+        rt[2, 1] = 1
 
-        vert_up = zeros.clone()
-        vert_dn = zeros.clone()
-        vert_up[1, 0] = 1
-        vert_dn[1, 2] = 1
+        up = zeros.clone()
+        dn = zeros.clone()
+        up[1, 0] = 1
+        dn[1, 2] = 1
 
-        diag_tlf = zeros.clone()
-        diag_brt = zeros.clone()
-        diag_tlf[0, 0] = 1
-        diag_brt[2, 2] = 1
+        tlf = zeros.clone()
+        brt = zeros.clone()
+        tlf[0, 0] = 1
+        brt[2, 2] = 1
 
-        diag_blf = zeros.clone()
-        diag_trt = zeros.clone()
-        diag_blf[0, 2] = 1
-        diag_trt[2, 0] = 1
+        blf = zeros.clone()
+        trt = zeros.clone()
+        blf[0, 2] = 1
+        trt[2, 0] = 1
 
-        kernels = t.stack([hori_lf, hori_rt, vert_up, vert_dn, diag_tlf, diag_brt, diag_blf, diag_trt], 0).unsqueeze(1)
+        select_conv = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, padding=1, bias=False)
+        select_conv.weight.data = t.stack([lf, rt, up, dn, tlf, brt, blf, trt], 0).unsqueeze(1)
 
-        selection_conv = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, padding=1, bias=False)
-        selection_conv.weight.data = kernels
+        select_ids = t.tensor([[0, 1], [4, 5], [2, 3], [6, 7], [0, 1], [4, 5], [2, 3], [6, 7]], dtype=t.long)
+        return select_conv, select_ids
 
-        selection_ids = t.tensor([[0, 1], [4, 5], [2, 3], [6, 7], [0, 1], [4, 5], [2, 3], [6, 7]], dtype=t.long)
-        return selection_conv, selection_ids
-
-    def sobel(self, k_size: int) -> tuple[nn.Conv2d, nn.Conv2d]:
+    @staticmethod
+    def sobel(k_size: int) -> tuple[nn.Conv2d, nn.Conv2d]:
         linrange = t.linspace(-(k_size // 2), k_size // 2, k_size)
-        x, y = t.meshgrid(linrange, linrange)
+        x, y = t.meshgrid(linrange, linrange, indexing="ij")
         sobel_numer = x
         sobel_denom = x.pow(2) + y.pow(2)
         sobel_denom[:, k_size // 2] = 1
@@ -70,9 +75,10 @@ class Canny(nn.Module):
         sobel_y.weight.data = sobel.view(1, 1, k_size, k_size)
         return sobel_x, sobel_y
 
-    def gaussian(self, k_gauss: int, sigma: float) -> nn.Conv2d:
+    @staticmethod
+    def gaussian(k_gauss: int, sigma: float) -> nn.Conv2d:
         linrange = t.linspace(-1, 1, k_gauss)
-        x, y = t.meshgrid(linrange, linrange)
+        x, y = t.meshgrid(linrange, linrange, indexing="ij")
         sq_dist = x.pow(2) + y.pow(2)
 
         gaussian = (-sq_dist / (2 * sigma**2)).exp()
@@ -83,7 +89,8 @@ class Canny(nn.Module):
         gauss.weight.data = gaussian.view(1, 1, k_gauss, k_gauss)
         return gauss
 
-    def hysteresis(self) -> nn.Conv2d:
+    @staticmethod
+    def hysteresis() -> nn.Conv2d:
         hyst = nn.Conv2d(1, 1, kernel_size=3, padding=1, padding_mode="reflect", bias=False)
         hyst.weight.data = t.ones((1, 1, 3, 3))
         return hyst
@@ -108,7 +115,7 @@ class Canny(nn.Module):
         grad_phase = grad_phase.div(math.pi / 4).round().add(4).fmod(8)
         grad_phase = grad_phase.long()
 
-        selections: Tensor = self.selection_conv(grad_mag)
+        selections: Tensor = self.select_conv(grad_mag)
         neb_ids = self.selection_ids[grad_phase]
         nebs = selections.gather(1, neb_ids[:, 0, ...].permute(0, 3, 1, 2))
 
@@ -118,11 +125,11 @@ class Canny(nn.Module):
         grad_mag = t.where(mask_suppress, zeros, grad_mag)
 
         # thresholds
-        mask_lo = grad_mag < self.low_threshold
+        mask_lo = grad_mag < self.thresh_lo
         grad_mag = t.where(mask_lo, zeros, grad_mag)
 
-        weak_mask = (grad_mag < self.high_threshold) & (grad_mag > self.low_threshold)
-        high_mask = grad_mag > self.high_threshold
+        weak_mask = (grad_mag < self.thresh_hi) & (grad_mag > self.thresh_lo)
+        high_mask = grad_mag > self.thresh_hi
 
         # hysteresis
         high_nebs: Tensor = self.hyst(high_mask.float())

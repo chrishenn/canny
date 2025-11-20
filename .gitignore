@@ -14,4 +14,4 @@ tmp/
 *~
 *.pth
 checkpoints/
-
+dist/
