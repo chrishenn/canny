@@ -40,15 +40,3 @@ Available recipes:
     test        # run basic tests
     unsafe      # run ruff with unsafe-fixes
 ```
-
----
-
-# Dev
-
-```bash
-# build distrobution pkgs locally
-uv build --package canny_chenn
-
-# push tag to trigger pypi to build pkgs and publish to pypi
-git tag -a v1.0.1 -m v1.0.1 -f && git push --tags -f
-```

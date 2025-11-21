@@ -12,7 +12,7 @@ classifiers = [
   "Programming Language :: Python"
 ]
 
-requires-python = ">=3.13.9,<3.14"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "numpy>=2.3.5",
     "torch>=2.9.1",
