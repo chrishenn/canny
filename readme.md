@@ -50,5 +50,5 @@ Available recipes:
 uv build --package canny_chenn
 
 # push tag to trigger pypi to build pkgs and publish to pypi
-git tag -a v1.0.0 -m v1.0.0 -f && git push --tags -f
+git tag -a v1.0.1 -m v1.0.1 -f && git push --tags -f
 ```
