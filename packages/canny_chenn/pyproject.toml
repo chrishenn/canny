@@ -5,7 +5,7 @@ description = "A simple Canny edge detector for pytorch"
 readme = "readme.md"
 authors = [{name = "Christian Henn", email = "chenn@alum.mit.edu"}]
 license = "MIT"
-urls = {Homepage = "https://example.com", Repository = "https://github.com/me/spam.git"}
+urls = {Repository = "https://github.com/chrishenn/canny"}
 keywords = ["computer vision", "edge detection", "opencv"]
 classifiers = [
   "Development Status :: 4 - Beta",

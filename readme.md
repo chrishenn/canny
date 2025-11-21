@@ -1,13 +1,13 @@
 <h1 align="center" style="margin-top: 0px;">Canny Edges</h1>
 <div id="img0" align="center">
-    <img src="doc/images/img1.png" width=200 alt="img1_in">
-    <img src="doc/images/img2.png" width=200 alt="img2_in">
-    <img src="doc/images/img3.png" width=200 alt="img3_in">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img1.png" width=200 alt="img1_in">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img2.png" width=200 alt="img2_in">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img3.png" width=200 alt="img3_in">
 </div>
 <div id="img0" align="center">
-    <img src="doc/images/img1_out.png" width=200 alt="img1_out">
-    <img src="doc/images/img2_out.png" width=200 alt="img2_out">
-    <img src="doc/images/img3_out.png" width=200 alt="img3_out">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img1_out.png" width=200 alt="img1_out">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img2_out.png" width=200 alt="img2_out">
+    <img src="https://raw.githubusercontent.com/chrishenn/canny/refs/heads/main/packages/canny_chenn/doc/images/img3_out.png" width=200 alt="img3_out">
 </div>
 
 &emsp;
@@ -47,8 +47,8 @@ Available recipes:
 
 ```bash
 # build distrobution pkgs locally
-uv build --package canny
+uv build --package canny_chenn
 
 # push tag to trigger pypi to build pkgs and publish to pypi
-git tag -a v0.1.0 -m v0.1.0 && git push --tags
+git tag -a v1.0.0 -m v1.0.0 -f && git push --tags -f
 ```

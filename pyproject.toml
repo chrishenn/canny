@@ -13,6 +13,6 @@ python_files = ["test_*.py", "*_test.py"]
 [dependency-groups]
 dev = [
     "pytest-mypy>=1.0.1",
-    "pytest_pretty",
+    "pytest-pretty>=1.3.0",
 ]
 
