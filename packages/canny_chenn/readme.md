@@ -14,19 +14,50 @@
 
 A simple `Torch.nn.Module` to return an image mask representing edges found by the Canny Edge-Finding algorithm.
 
-Supports:
-
-- PyTorch Tensor images formatted in image batches [B, C, h, w], with float32 data, and values spanning [0,1]
-- any number of channels C
-- TorchScript jit script, as well as the newer, traced torch-export, on the Canny `nn.Module` class
 
 ---
 
 # Usage
 
+Supports:
+
+- Linux only
+- PyTorch Tensor images formatted in image batches [B, C, h, w], with float32 data, and values spanning [0,1]
+- Any number of channels C
+- TorchScript jit script, as well as the newer, traced torch-export, on the Canny `nn.Module` class
+
+pip install
+
+```bash
+pip install canny-chenn
+# or,
+pixi add --pypi canny_chenn
+```
+
+then
+
+```python
+from torch import Tensor
+from canny_chenn import Canny
+canny = Canny()
+img_batch = Tensor([[[[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]],
+            [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]],
+            [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]],
+            [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3]]]])
+edge_mask = canny(img_batch)
+# tensor([[[[0.0000, 0.6333, 0.0000, 0.0000],
+#           [0.0000, 0.6333, 0.0000, 0.0000],
+#           [0.0000, 0.6333, 0.0000, 0.0000]]]])
+```
+
+---
+
+# Dev
+
 I use mise to handle project tools. Install it if you don't have it
 
 ```bash
+# clone, install tools
 git clone https://github.com/chrishenn/canny.git
 cd canny
 mise i
@@ -39,16 +70,10 @@ Available recipes:
     lint        # run project formatters/linters [alias: l]
     test        # run basic tests
     unsafe      # run ruff with unsafe-fixes
-```
-
----
-
-# Dev
-
-```bash
-# build distrobution pkgs locally
+    
+# build distribution pkgs locally
 uv build --package canny_chenn
 
 # push tag to trigger pypi to build pkgs and publish to pypi
-git tag -a v1.0.2 -m v1.0.2 -f && git push --tags -f
+git tag -a v1.0.3 -m v1.0.3 -f && git push --tags -f
 ```

@@ -1,4 +1,4 @@
-from canny_chenn.canny import Canny
+from canny_chenn import Canny
 from torch import Tensor
 
 
