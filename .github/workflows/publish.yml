@@ -25,11 +25,11 @@ jobs:
       - name: Install Python
         run: uv python install 3.13.9
       - name: Build
-        run: uv build --package canny
+        run: uv build --package canny_chenn
 
       - name: Smoke test (wheel)
-        run: uv run --isolated --no-project --with dist/*.whl packages/canny/test/test_smoke.py
+        run: uv run --isolated --no-project --with dist/*.whl packages/canny_chenn/test/test_smoke.py
       - name: Smoke test (source distribution)
-        run: uv run --isolated --no-project --with dist/*.tar.gz packages/canny/test/test_smoke.py
+        run: uv run --isolated --no-project --with dist/*.tar.gz packages/canny_chenn/test/test_smoke.py
       - name: Publish
         run: uv publish
