@@ -3,7 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import torch as t
 import torchvision as tv
-from canny.canny import Canny
+from canny_chenn.canny import Canny
 from more_itertools import one
 from torch import Tensor
 from torch.utils.data.dataloader import DataLoader

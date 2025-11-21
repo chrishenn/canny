@@ -1,5 +1,5 @@
 [project]
-name = "canny"
+name = "canny-chenn"
 version = "1.0.0"
 description = "A simple Canny edge detector for pytorch"
 readme = "readme.md"

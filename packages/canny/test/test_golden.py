@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 import torch as t
-from canny.canny import Canny
+from canny_chenn.canny import Canny
 from more_itertools import first, one
 from torch import Tensor, allclose, device
 from torch.export import export
