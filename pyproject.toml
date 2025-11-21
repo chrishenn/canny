@@ -2,7 +2,7 @@
 workspace.members = ["packages/*"]
 
 [tool.mypy]
-packages = ["canny"]
+packages = ["canny_chenn"]
 exclude = ["deprecated"]
 ignore_missing_imports = true
 
