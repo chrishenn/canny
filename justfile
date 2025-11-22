@@ -13,9 +13,9 @@ lint:
 unsafe:
     uv run ruff check --fix --unsafe-fixes
 
-# Detect and display canny edges on a set of test images. Use ctrl+c to kill
-interactive:
-    uv run packages/canny/test/test_interactive.py
+# Show canny detections on a set of test images. Kill with ctrl+c
+demo:
+    uv run packages/canny_chenn/test/test_demo.py
 
 # run basic tests
 test:

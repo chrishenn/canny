@@ -6,10 +6,6 @@ packages = ["canny_chenn"]
 exclude = ["deprecated"]
 ignore_missing_imports = true
 
-[tool.pytest.ini_options]
-testpaths = ["packages*"]
-python_files = ["test_*.py", "*_test.py"]
-
 [dependency-groups]
 dev = [
     "pytest-mypy>=1.0.1",

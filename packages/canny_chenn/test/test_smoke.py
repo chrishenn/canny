@@ -1,5 +1,6 @@
-from canny_chenn import Canny
 from torch import Tensor
+
+from canny_chenn import Canny
 
 
 def test_smoke() -> None:

@@ -1,3 +1,4 @@
 from .canny import Canny
 
-__all__ = ("Canny")
+
+__all__ = ("Canny",)

@@ -34,7 +34,7 @@ def gdata(imdir: Path) -> Tensor:
 
 
 def tcases() -> Generator[tuple[Canny | RecursiveScriptModule | GraphModule, device, Tensor, Tensor]]:
-    cannykwds = {"thresh_lo": 0.1, "thresh_hi": 0.2}
+    cannykwds: dict[str, float] = {"thresh_lo": 0.1, "thresh_hi": 0.2}
 
     data = tdata(datadir)
     gold = gdata(golddir)

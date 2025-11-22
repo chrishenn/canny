@@ -1,6 +1,6 @@
 [project]
 name = "canny-chenn"
-version = "1.0.3"
+version = "1.0.4"
 description = "A simple Canny edge detector for pytorch"
 readme = "readme.md"
 authors = [{name = "Christian Henn", email = "chenn@alum.mit.edu"}]
@@ -8,8 +8,9 @@ license = "MIT"
 urls = {Repository = "https://github.com/chrishenn/canny"}
 keywords = ["computer vision", "edge detection", "opencv"]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python"
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.13",
 ]
 
 requires-python = ">=3.12,<3.14"

@@ -17,7 +17,9 @@ class Canny(nn.Module):
     ) -> None:
         super().__init__()
 
-        self.thresh_lo, self.thresh_hi = thresh_lo, thresh_hi
+        # self.thresh_lo: float, self.thresh_hi: float = thresh_lo, thresh_hi
+        self.thresh_lo: float = thresh_lo
+        self.thresh_hi: float = thresh_hi
 
         self.select_conv, select_ids = self.selection()
         self.register_buffer("selection_ids", select_ids)
@@ -30,26 +32,21 @@ class Canny(nn.Module):
 
     @staticmethod
     def selection() -> tuple[nn.Conv2d, Tensor]:
-        zeros = t.zeros([3, 3])
-
-        lf = zeros.clone()
-        rt = zeros.clone()
+        lf = t.zeros([3, 3])
         lf[0, 1] = 1
+        rt = t.zeros([3, 3])
         rt[2, 1] = 1
-
-        up = zeros.clone()
-        dn = zeros.clone()
+        up = t.zeros([3, 3])
         up[1, 0] = 1
+        dn = t.zeros([3, 3])
         dn[1, 2] = 1
-
-        tlf = zeros.clone()
-        brt = zeros.clone()
+        tlf = t.zeros([3, 3])
         tlf[0, 0] = 1
+        brt = t.zeros([3, 3])
         brt[2, 2] = 1
-
-        blf = zeros.clone()
-        trt = zeros.clone()
+        blf = t.zeros([3, 3])
         blf[0, 2] = 1
+        trt = t.zeros([3, 3])
         trt[2, 0] = 1
 
         select_conv = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, padding=1, bias=False)
@@ -59,25 +56,25 @@ class Canny(nn.Module):
         return select_conv, select_ids
 
     @staticmethod
-    def sobel(k_size: int) -> tuple[nn.Conv2d, nn.Conv2d]:
-        linrange = t.linspace(-(k_size // 2), k_size // 2, k_size)
+    def sobel(sobel_k: int) -> tuple[nn.Conv2d, nn.Conv2d]:
+        linrange = t.linspace(-(sobel_k // 2), sobel_k // 2, sobel_k)
         x, y = t.meshgrid(linrange, linrange, indexing="ij")
         sobel_numer = x
         sobel_denom = x.pow(2) + y.pow(2)
-        sobel_denom[:, k_size // 2] = 1
+        sobel_denom[:, sobel_k // 2] = 1
         sobel = sobel_numer / sobel_denom
         sobel.div_(6)
 
-        sobel_x = nn.Conv2d(1, 1, kernel_size=k_size, padding=k_size // 2, padding_mode="reflect", bias=False)
-        sobel_x.weight.data = sobel.clone().t().view(1, 1, k_size, k_size)
+        sobel_x = nn.Conv2d(1, 1, kernel_size=sobel_k, padding=sobel_k // 2, padding_mode="reflect", bias=False)
+        sobel_x.weight.data = sobel.clone().t().view(1, 1, sobel_k, sobel_k)
 
-        sobel_y = nn.Conv2d(1, 1, kernel_size=k_size, padding=k_size // 2, padding_mode="reflect", bias=False)
-        sobel_y.weight.data = sobel.view(1, 1, k_size, k_size)
+        sobel_y = nn.Conv2d(1, 1, kernel_size=sobel_k, padding=sobel_k // 2, padding_mode="reflect", bias=False)
+        sobel_y.weight.data = sobel.view(1, 1, sobel_k, sobel_k)
         return sobel_x, sobel_y
 
     @staticmethod
-    def gaussian(k_gauss: int, sigma: float) -> nn.Conv2d:
-        linrange = t.linspace(-1, 1, k_gauss)
+    def gaussian(gauss_k: int, sigma: float) -> nn.Conv2d:
+        linrange = t.linspace(-1, 1, gauss_k)
         x, y = t.meshgrid(linrange, linrange, indexing="ij")
         sq_dist = x.pow(2) + y.pow(2)
 
@@ -85,8 +82,8 @@ class Canny(nn.Module):
         gaussian = gaussian / (2 * math.pi * sigma**2)
         gaussian = gaussian / gaussian.sum()
 
-        gauss = nn.Conv2d(1, 1, kernel_size=k_gauss, padding=k_gauss // 2, padding_mode="reflect", bias=False)
-        gauss.weight.data = gaussian.view(1, 1, k_gauss, k_gauss)
+        gauss = nn.Conv2d(1, 1, kernel_size=gauss_k, padding=gauss_k // 2, padding_mode="reflect", bias=False)
+        gauss.weight.data = gaussian.view(1, 1, gauss_k, gauss_k)
         return gauss
 
     @staticmethod
