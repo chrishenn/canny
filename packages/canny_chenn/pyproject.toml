@@ -1,6 +1,6 @@
 [project]
 name = "canny-chenn"
-version = "1.0.4"
+version = "1.0.5"
 description = "A simple Canny edge detector for pytorch"
 readme = "readme.md"
 authors = [{name = "Christian Henn", email = "chenn@alum.mit.edu"}]
